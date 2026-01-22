@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MTG Tier Guessing Game - Mobile Ready</title>
+    <title>MTG Tier Guessing Game</title>
     <style>
         :root {
             --bg: #0f111a;
             --card-shadow: 0 20px 50px rgba(0,0,0,0.8);
             --accent: #00d2ff;
+            --btn-bg: #1a1c2c;
         }
 
         body {
@@ -22,7 +23,7 @@
             justify-content: center;
             height: 100vh;
             overflow: hidden;
-            touch-action: pan-y; /* Pozwala na scroll pionowy, ale blokuje systemowe gesty poziome */
+            touch-action: pan-y;
         }
 
         #card-name-display { 
@@ -47,7 +48,7 @@
             position: relative;
             text-align: center;
             flex-shrink: 0;
-            width: 320px; /* Szerokość dostosowana do urządzeń mobilnych */
+            width: 320px;
         }
 
         #card-image {
@@ -77,20 +78,38 @@
             z-index: 100;
         }
 
-        .card-display { position: relative; cursor: help; }
-        .card-display:active .tier-overlay,
-        .card-display:hover .tier-overlay { opacity: 1; }
+        /* Klasa pokazująca ranking po kliknięciu buttona */
+        .tier-overlay.visible {
+            opacity: 1;
+        }
 
         .side-btn {
             background: rgba(26, 28, 44, 0.6);
             border: 2px solid #333;
             color: white;
-            padding: 20px 10px;
+            padding: 20px 15px;
             border-radius: 10px;
             cursor: pointer;
             font-size: 1.5rem;
             transition: all 0.2s;
-            z-index: 10;
+        }
+
+        .reveal-btn {
+            margin-top: 20px;
+            background: var(--btn-bg);
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .reveal-btn:hover {
+            background: var(--accent);
+            color: black;
         }
 
         .side-btn:hover {
@@ -99,19 +118,11 @@
             border-color: var(--accent);
         }
 
-        .status { font-size: 0.8rem; color: #555; margin-top: 15px; }
+        .status { font-size: 0.8rem; color: #555; margin-top: 10px; }
 
-        /* Responsywność dla mobile */
         @media (max-width: 600px) {
-            .side-btn {
-                display: none; /* Ukrywamy przyciski na mobile, bo mamy gesty swipe */
-            }
-            .game-container {
-                width: 85vw;
-            }
-            #card-image {
-                min-height: auto;
-            }
+            .side-btn { display: none; }
+            .game-container { width: 80vw; }
         }
     </style>
 </head>
@@ -127,13 +138,15 @@
                 <img id="card-image" src="" alt="MTG Card">
                 <div class="tier-overlay" id="tier-value">?</div>
             </div>
+            
+            <button class="reveal-btn" onclick="toggleTier()">POKAŻ RANKING</button>
             <div class="status" id="card-counter"></div>
         </div>
 
         <button class="side-btn" onclick="nextCard()">▶</button>
     </div>
 
-    <p class="status" style="margin-top: 20px; opacity: 0.5;">Mobile: przesuń palcem lewo/prawo | PC: Strzałki</p>
+    <p class="status" style="margin-top: 20px; opacity: 0.5;">Swipe: Lewo/Prawo | Klik: Pokaż Ranking</p>
 
     <script>
         const rawData = {
@@ -150,28 +163,39 @@
         let cardList = [];
         let currentIndex = 0;
 
-        // --- OBSŁUGA GESTÓW (SWIPE) ---
+        function toggleTier() {
+            document.getElementById('tier-value').classList.toggle('visible');
+        }
+
+        function updateDisplay() {
+            // Ukryj ranking przy zmianie karty
+            document.getElementById('tier-value').classList.remove('visible');
+            
+            const card = cardList[currentIndex];
+            const img = document.getElementById('card-image');
+            
+            document.getElementById('card-name-display').innerText = card.name;
+            document.getElementById('tier-value').innerText = card.tier === "SB" ? "SB" : card.tier;
+            document.getElementById('card-counter').innerText = `Karta ${currentIndex + 1} z ${cardList.length}`;
+
+            const firstWord = card.name.split(/[ /,’']/)[0];
+            img.src = `img/${firstWord}.jpg`;
+            
+            img.onerror = () => { img.src = "https://svgs.scryfall.io/errors/missing.svg"; };
+        }
+
+        // --- Gesty Swipe ---
         let touchstartX = 0;
         let touchendX = 0;
-        
         const swipeArea = document.getElementById('swipe-area');
-
-        swipeArea.addEventListener('touchstart', e => {
-            touchstartX = e.changedTouches[0].screenX;
-        });
-
-        swipeArea.addEventListener('touchend', e => {
-            touchendX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
+        swipeArea.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; });
+        swipeArea.addEventListener('touchend', e => { touchendX = e.changedTouches[0].screenX; handleSwipe(); });
         function handleSwipe() {
-            const threshold = 50; // czułość gestu
+            const threshold = 50;
             if (touchendX < touchstartX - threshold) nextCard();
             if (touchendX > touchstartX + threshold) prevCard();
         }
 
-        // --- LOGIKA GRY ---
         function init() {
             for (let tier in rawData) {
                 rawData[tier].forEach(name => cardList.push({ name, tier }));
@@ -180,29 +204,13 @@
             updateDisplay();
         }
 
-        function updateDisplay() {
-            const card = cardList[currentIndex];
-            const img = document.getElementById('card-image');
-            
-            document.getElementById('card-name-display').innerText = card.name;
-            document.getElementById('tier-value').innerText = card.tier === "SB" ? "SB" : card.tier;
-            document.getElementById('card-counter').innerText = `Karta ${currentIndex + 1} z ${cardList.length}`;
-
-            // Dopasowanie do nazw Twoich obrazków (tylko pierwsze słowo przed spacją/znakiem spec.)
-            const firstWord = card.name.split(/[ /,’']/)[0];
-            img.src = `img/${firstWord}.jpg`;
-            
-            img.onerror = () => {
-                img.src = "https://svgs.scryfall.io/errors/missing.svg";
-            };
-        }
-
         function nextCard() { currentIndex = (currentIndex + 1) % cardList.length; updateDisplay(); }
         function prevCard() { currentIndex = (currentIndex - 1 + cardList.length) % cardList.length; updateDisplay(); }
 
         document.addEventListener('keydown', (e) => {
             if (e.key === "ArrowRight") nextCard();
             if (e.key === "ArrowLeft") prevCard();
+            if (e.key === " " || e.key === "Enter") toggleTier(); // Spacja/Enter też odkrywa
         });
 
         init();
