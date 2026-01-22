@@ -1,98 +1,177 @@
-<html>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-    .row {
-      display: flex;
-      overflow-x: scroll;
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTG Draft Tier List</title>
+    <style>
+        :root {
+            --bg-color: #0f111a;
+            --card-bg: #1a1c2c;
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            --accent: #00d2ff;
+        }
 
-      max-width: 100%;
-    }
-    img {
-      display: block;
-      width: 240px;
-    }
-  </style>
-  <body>
-    <div class="row">
-      <img src="./black/mom-88-aetherblade-agent.jpg" alt="" />
-      <img src="./black/mom-89-archpriest-of-shadows.jpg" alt="" />
-      <img src="./black/mom-90-ayara-widow-of-the-realm.jpg" alt="" />
-      <img src="./black/mom-92-blightreaper-thallid.jpg" alt="" />
-      <img src="./black/mom-93-bloated-processor.jpg" alt="" />
-      <img src="./black/mom-95-collective-nightmare.jpg" alt="" />
-      <img src="./black/mom-99-deadly-derision.jpg" alt="" />
-      <img src="./black/mom-104-final-flourish.jpg" alt="" />
-      <img src="./black/mom-109-grafted-butcher.jpg" alt="" />
-      <img src="./black/mom-110-hoarding-broodlord.jpg" alt="" />
-      <img src="./black/mom-114-invasion-of-fiora.jpg" alt="" />
-      <img src="./black/mom-115-invasion-of-innistrad.jpg" alt="" />
-      <img src="./black/mom-121-phyrexian-gargantua.jpg" alt="" />
-      <img src="./black/mom-122-pile-on.jpg" alt="" />
-      <img src="./black/mom-125-sheoldred.jpg" alt="" />
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid #333;
+            margin-bottom: 40px;
+        }
+
+        .tier-section {
+            margin-bottom: 60px;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .tier-header {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Kolory dla poszczególnych poziomów */
+        .tier-4-5 .tier-header { color: #ff0055; border-left: 8px solid #ff0055; padding-left: 15px; }
+        .tier-4-0 .tier-header { color: #ff4e00; border-left: 8px solid #ff4e00; padding-left: 15px; }
+        .tier-3-5 .tier-header { color: #ff9d00; border-left: 8px solid #ff9d00; padding-left: 15px; }
+        .tier-3-0 .tier-header { color: #ffd900; border-left: 8px solid #ffd900; padding-left: 15px; }
+        .tier-2-5 .tier-header { color: #a2ff00; border-left: 8px solid #a2ff00; padding-left: 15px; }
+        .tier-Shit-SB .tier-header { color: #888; border-left: 8px solid #444; padding-left: 15px; }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .card-wrapper {
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .card-wrapper:hover {
+            transform: scale(1.08) translateY(-10px);
+            z-index: 10;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.8);
+        }
+
+        .card-img {
+            width: 100%;
+            display: block;
+            min-height: 250px;
+            background: #222;
+        }
+
+        .card-info {
+            padding: 10px;
+            font-size: 0.75rem;
+            text-align: center;
+            background: #111;
+            color: var(--text-dim);
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.8rem;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>MTG Draft Tier List</h1>
+        </header>
+        <div id="tier-content"></div>
     </div>
-    <div class="row">
-      <img src="./blue/mom-49-captive-weird.jpg" alt="" />
-      <img src="./blue/mom-51-chrome-host-seedshark.jpg" alt="" />
-      <img src="./blue/mom-58-faerie-mastermind.jpg" alt="" />
-      <img src="./blue/mom-65-jin-gitaxias.jpg" alt="" />
-      <img src="./blue/mom-70-omen-hawker.jpg" alt="" />
-      <img src="./blue/mom-75-rona-herald-of-invasion.jpg" alt="" />
-      <img src="./blue/mom-77-see-double.jpg" alt="" />
-      <img src="./blue/mom-83-transcendent-message.jpg" alt="" />
-      <img src="./blue/mom-85-xerex-strobe-knight.jpg" alt="" />
-      <img src="./blue/mom-355-zephyr-singer.jpg" alt="" />
-    </div>
-    <div class="row">
-      <img src="./green/mom-174-ancient-imperiosaur.jpg" alt="" />
-      <img src="./green/mom-182-cosmic-hunger.jpg" alt="" />
-      <img src="./green/mom-185-doomskar-warrior.jpg" alt="" />
-      <img src="./green/mom-187-glistening-dawn.jpg" alt="" />
-      <img src="./green/mom-190-invasion-of-ikoria.jpg" alt="" />
-      <img src="./green/mom-190-invasion-of-ixalan.jpg" alt="" />
-      <img src="./green/mom-197-overgrown-pest.jpg" alt="" />
-      <img src="./green/mom-200-polukranos-reborn.jpg" alt="" />
-      <img src="./green/mom-202-ravenous-sailback.jpg" alt="" />
-      <img src="./green/mom-207-streetwise-negotiator.jpg" alt="" />
-      <img src="./green/mom-208-tandem-takedown.jpg" alt="" />
-      <img src="./green/mom-211-tribute-to-the-world-tree.jpg" alt="" />
-      <img src="./green/mom-213-vorinclex.jpg" alt="" />
-      <img src="./green/mom-217-wrenn-and-realmbreaker.jpg" alt="" />
-      <img src="./green/mom-372-ozolith-the-shattered-spire.jpg" alt="" />
-    </div>
-    <div class="row">
-      <img src="./red/mom-134-chandra-hope-s-beacon.jpg" alt="" />
-      <img src="./red/mom-137-etali-primal-conqueror.jpg" alt="" />
-      <img src="./red/mom-144-into-the-fire.jpg" alt="" />
-      <img src="./red/mom-145-invasion-of-kaldheim.jpg" alt="" />
-      <img src="./red/mom-146-invasion-of-karsus.jpg" alt="" />
-      <img src="./red/mom-149-invasion-of-tarkir.jpg" alt="" />
-      <img src="./red/mom-151-khenra-spellspear.jpg" alt="" />
-      <img src="./red/mom-155-nahiri-s-warcrafting.jpg" alt="" />
-      <img src="./red/mom-160-rampaging-raptor.jpg" alt="" />
-      <img src="./red/mom-166-stoke-the-flames.jpg" alt="" />
-      <img src="./red/mom-169-urabrask.jpg" alt="" />
-      <img src="./red/mom-170-volcanic-spite.jpg" alt="" />
-      <img src="./red/mom-171-voldaren-thrillseeker.jpg" alt="" />
-      <img src="./red/mom-173-wrenn-s-resolve.jpg" alt="" />
-    </div>
-    <div class="row">
-      <img src="./white/mom-9-boon-bringer-valkyrie.jpg" alt="" />
-      <img src="./white/mom-11-dusk-legion-duelist.jpg" alt="" />
-      <img src="./white/mom-12-elesh-norn.jpg" alt="" />
-      <img src="./white/mom-16-guardian-of-ghirapur.jpg" alt="" />
-      <img src="./white/mom-17-heliod-the-radiant-dawn.jpg" alt="" />
-      <img src="./white/mom-20-invasion-of-belenon.jpg" alt="" />
-      <img src="./white/mom-22-invasion-of-gobakhan.jpg" alt="" />
-      <img src="./white/mom-26-knight-errant-of-eos.jpg" alt="" />
-      <img src="./white/mom-28-monastery-mentor.jpg" alt="" />
-      <img src="./white/mom-32-progenitor-exarch.jpg" alt="" />
-      <img src="./white/mom-35-seal-from-existence.jpg" alt="" />
-      <img src="./white/mom-40-sunfall.jpg" alt="" />
-      <img src="./white/mom-320-archangel-elspeth.jpg" alt="" />
-      <img src="./white/mul-381-norn-s-inquisitor.jpg" alt="" />
-    </div>
-  </body>
+
+    <script>
+        const tierData = {
+            "4.5": ["Spinerock Tyrant", "Ajani, Outland Chaperone", "Curious Colossus", "Eirdu, Carrier of Dawn"],
+            "4.0": ["Champions of the Shoal", "Loch Mare", "Sunderflock", "End-Blaze Epiphany", "Soul Immolation", "Bitterbloom Bearer", "Champion of the Weird", "Moonshadow", "Champion of the Clachan"],
+            "3.5": ["Disruptor of Currents", "Flitterwing Nuisance", "Glen Elendra Guardian", "Lofty Dreams", "Oko, Lorwyn Liege", "Sygg, Wanderwine Wisdom", "Sear", "Gloom Ripper", "Taster of Wares", "Adept Watershaper", "Brigid, Clachan’s Heart", "Kinbinding", "Pyrrhic Strike"],
+            "3.0": ["Blossombind", "Glamer Gifter", "Harmonized Crescendo", "Mirrorform", "Rime Chill", "Rimekin Recluse", "Shinestriker", "Swat Away", "Temporal Cleansing", "Unwelcome Sprite", "Ashling, Rekindled", "Boulder Dash", "Champion of the Path", "Cinder Strike", "Collective Inferno", "Explosive Prodigy", "Feed the Flames", "Giantfall", "Goliath Daydreamer", "Sizzling Changeling", "Blight Rot", "Bogslither’s Embrace", "Creakwood Safewright", "Dawnhand Dissident", "Gnarlbark Elm", "Graveshifter", "Iron-Shield Elf", "Nameless Inversion", "Burdened Stoneback", "Encumbered Reejerey", "Kinscaer Sentry", "Liminal Hold", "Moonlit Lamenter", "Protective Response", "Rhys, the Evermore", "Slumbering Walker", "Spiral into Solitude", "Wanderbrine Trapper", "Winnowing"],
+            "2.5": ["Glamermite", "Noggle the Mind", "Silvergill Mentor", "Unexpected Assistance", "Boldwyr Aggressor", "Elder Auntie", "Flamebraider", "Kulrath Zealot", "Scuzzback Scrounger", "Sourbread Auntie", "Squawkroaster", "Sting-Slinger", "Tweeze", "Boggart Mischief", "Dream Seizer", "Grub, Storied Matriarch", "Gutsplitter Gang", "Mudbutton Cursetosser", "Nightmare Sower", "Requiting Hex", "Retched Wretch", "Scarblade Scout", "Shimmercreep", "Twilight Diviner", "Unbury", "Flock Impostor", "Thoughtweft Imbuer", "Wanderbrine Preacher"],
+            "2.0": ["Aquitect’s Defenses", "Illusion Spinners", "Omni-Changeling", "Stratosoarer", "Summit Sentinel", "Thirst for Identity", "Wild Unraveling", "Boneclub Berserker", "Brambleback Brute", "Flamekin Gildweaver", "Goatnap", "Gristle Glutton", "Hexing Squelcher", "Kindle the Inner Flame", "Soulbright Seeker", "Warren Torchmaster", "Auntie’s Sentence", "Barbed Bloodletter", "Bloodline Bidding", "Boggart Prankster", "Dawnhand Eulogist", "Dose of Dawnglow", "Heirloom Auntie", "Goldmeadow Nomad", "Keep Out", "Kinsbaile Aspirant", "Morningtide’s Light", "Personify", "Reluctant Dounguard", "Shore Lurker", "Sun-Dappled Celebrant", "Timid Shieldbearer", "Tributary Vaulter"],
+            "1.5": ["Glen Elendra’s Answer", "Gravelgill Scoundrel", "Kulrath Mystic", "Pestered Wellguard", "Run Away Together", "Silvergill Peddler", "Tanufel Rimespeaker", "Wanderwine Distracter", "Wanderwine Farewell", "Burning Curiosity", "Enraged Flamecaster", "Flame-Chain Mauler", "Impolite Entrance", "Lavaleaper", "Reckless Ransacking", "Bile-Vial Boggart", "Blighted Blackthorn", "Moonglove Extractor", "Perfect Intimidation", "Scarblade’s Malice", "Appeal to Eirdu", "Bark of Doran", "Clachan Festival", "Crib Swap", "Evershrike’s Gift", "Gallant Fowlknight", "Kithkeeper", "Meanders Guide", "Riverguard’s Reflexes"],
+            "Shit-SB": ["Rimefire Torque", "Spell Snare", "Lasting Tarfire", "Meek Attack", "Darkness Descends", "Mornsong Aria"]
+        };
+
+        const contentDiv = document.getElementById('tier-content');
+
+        async function getImg(name) {
+            try {
+                // Scryfall fuzzy search dla lepszej trafności
+                const resp = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${encodeURIComponent(name)}`);
+                const json = await resp.json();
+                if (json.image_uris) return json.image_uris.normal;
+                if (json.card_faces) return json.card_faces[0].image_uris.normal;
+                return 'https://svgs.scryfall.io/errors/missing.svg';
+            } catch (e) {
+                return 'https://svgs.scryfall.io/errors/missing.svg';
+            }
+        }
+
+        async function init() {
+            for (const [tier, cards] of Object.entries(tierData)) {
+                const section = document.createElement('div');
+                section.className = `tier-section tier-${tier.replace('.', '-')}`;
+                
+                const tierTitle = tier === "Shit-SB" ? "Shit / Sideboard" : `Tier ${tier}`;
+                
+                section.innerHTML = `
+                    <div class="tier-header">${tierTitle}</div>
+                    <div class="card-grid" id="grid-${tier.replace('.', '-')}"></div>
+                `;
+                contentDiv.appendChild(section);
+
+                const grid = document.getElementById(`grid-${tier.replace('.', '-')}`);
+
+                cards.forEach(async (cardName) => {
+                    const cardDiv = document.createElement('div');
+                    cardDiv.className = 'card-wrapper';
+                    cardDiv.innerHTML = `<div class="loader">...</div>`;
+                    grid.appendChild(cardDiv);
+
+                    const imgUrl = await getImg(cardName);
+                    cardDiv.innerHTML = `
+                        <img src="${imgUrl}" class="card-img" alt="${cardName}" loading="lazy">
+                        <div class="card-info">${cardName}</div>
+                    `;
+                });
+            }
+        }
+
+        init();
+    </script>
+</body>
 </html>
