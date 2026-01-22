@@ -48,7 +48,6 @@
             gap: 15px;
         }
 
-        /* Kolory dla poszczególnych poziomów */
         .tier-4-5 .tier-header { color: #ff0055; border-left: 8px solid #ff0055; padding-left: 15px; }
         .tier-4-0 .tier-header { color: #ff4e00; border-left: 8px solid #ff4e00; padding-left: 15px; }
         .tier-3-5 .tier-header { color: #ff9d00; border-left: 8px solid #ff9d00; padding-left: 15px; }
@@ -81,6 +80,7 @@
             display: block;
             min-height: 250px;
             background: #222;
+            border-bottom: 1px solid #333;
         }
 
         .card-info {
@@ -93,15 +93,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .loader {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 0.8rem;
-            color: #444;
         }
     </style>
 </head>
@@ -116,36 +107,27 @@
 
     <script>
         const tierData = {
-            "4.5": ["Spinerock Tyrant", "Ajani, Outland Chaperone", "Curious Colossus", "Eirdu, Carrier of Dawn"],
+            "4.5": ["Spinerock Tyrant", "Ajani, Outland Chaperone", "Curious Colossus", "Eirdu, Carrier of Dawn // Isilu, Carrier of Twilight"],
             "4.0": ["Champions of the Shoal", "Loch Mare", "Sunderflock", "End-Blaze Epiphany", "Soul Immolation", "Bitterbloom Bearer", "Champion of the Weird", "Moonshadow", "Champion of the Clachan"],
-            "3.5": ["Disruptor of Currents", "Flitterwing Nuisance", "Glen Elendra Guardian", "Lofty Dreams", "Oko, Lorwyn Liege", "Sygg, Wanderwine Wisdom", "Sear", "Gloom Ripper", "Taster of Wares", "Adept Watershaper", "Brigid, Clachan’s Heart", "Kinbinding", "Pyrrhic Strike"],
-            "3.0": ["Blossombind", "Glamer Gifter", "Harmonized Crescendo", "Mirrorform", "Rime Chill", "Rimekin Recluse", "Shinestriker", "Swat Away", "Temporal Cleansing", "Unwelcome Sprite", "Ashling, Rekindled", "Boulder Dash", "Champion of the Path", "Cinder Strike", "Collective Inferno", "Explosive Prodigy", "Feed the Flames", "Giantfall", "Goliath Daydreamer", "Sizzling Changeling", "Blight Rot", "Bogslither’s Embrace", "Creakwood Safewright", "Dawnhand Dissident", "Gnarlbark Elm", "Graveshifter", "Iron-Shield Elf", "Nameless Inversion", "Burdened Stoneback", "Encumbered Reejerey", "Kinscaer Sentry", "Liminal Hold", "Moonlit Lamenter", "Protective Response", "Rhys, the Evermore", "Slumbering Walker", "Spiral into Solitude", "Wanderbrine Trapper", "Winnowing"],
-            "2.5": ["Glamermite", "Noggle the Mind", "Silvergill Mentor", "Unexpected Assistance", "Boldwyr Aggressor", "Elder Auntie", "Flamebraider", "Kulrath Zealot", "Scuzzback Scrounger", "Sourbread Auntie", "Squawkroaster", "Sting-Slinger", "Tweeze", "Boggart Mischief", "Dream Seizer", "Grub, Storied Matriarch", "Gutsplitter Gang", "Mudbutton Cursetosser", "Nightmare Sower", "Requiting Hex", "Retched Wretch", "Scarblade Scout", "Shimmercreep", "Twilight Diviner", "Unbury", "Flock Impostor", "Thoughtweft Imbuer", "Wanderbrine Preacher"],
-            "2.0": ["Aquitect’s Defenses", "Illusion Spinners", "Omni-Changeling", "Stratosoarer", "Summit Sentinel", "Thirst for Identity", "Wild Unraveling", "Boneclub Berserker", "Brambleback Brute", "Flamekin Gildweaver", "Goatnap", "Gristle Glutton", "Hexing Squelcher", "Kindle the Inner Flame", "Soulbright Seeker", "Warren Torchmaster", "Auntie’s Sentence", "Barbed Bloodletter", "Bloodline Bidding", "Boggart Prankster", "Dawnhand Eulogist", "Dose of Dawnglow", "Heirloom Auntie", "Goldmeadow Nomad", "Keep Out", "Kinsbaile Aspirant", "Morningtide’s Light", "Personify", "Reluctant Dounguard", "Shore Lurker", "Sun-Dappled Celebrant", "Timid Shieldbearer", "Tributary Vaulter"],
-            "1.5": ["Glen Elendra’s Answer", "Gravelgill Scoundrel", "Kulrath Mystic", "Pestered Wellguard", "Run Away Together", "Silvergill Peddler", "Tanufel Rimespeaker", "Wanderwine Distracter", "Wanderwine Farewell", "Burning Curiosity", "Enraged Flamecaster", "Flame-Chain Mauler", "Impolite Entrance", "Lavaleaper", "Reckless Ransacking", "Bile-Vial Boggart", "Blighted Blackthorn", "Moonglove Extractor", "Perfect Intimidation", "Scarblade’s Malice", "Appeal to Eirdu", "Bark of Doran", "Clachan Festival", "Crib Swap", "Evershrike’s Gift", "Gallant Fowlknight", "Kithkeeper", "Meanders Guide", "Riverguard’s Reflexes"],
+            "3.5": ["Disruptor of Currents", "Flitterwing Nuisance", "Glen Elendra Guardian", "Lofty Dreams", "Oko, Lorwyn Liege // Oko, Shadowmoor Scion", "Sygg, Wanderwine Wisdom // Sygg, Wanderbrine Shield", "Sear", "Gloom Ripper", "Taster of Wares", "Adept Watershaper", "Brigid, Clachan’s Heart // Brigid, Doun’s Mind", "Kinbinding", "Pyrrhic Strike"],
+            "3.0": ["Blossombind", "Glamer Gifter", "Harmonized Crescendo", "Mirrorform", "Rime Chill", "Rimekin Recluse", "Shinestriker", "Swat Away", "Temporal Cleansing", "Unwelcome Sprite", "Ashling, Rekindled // Ashling, Rimebound", "Boulder Dash", "Champion of the Path", "Cinder Strike", "Collective Inferno", "Explosive Prodigy", "Feed the Flames", "Giantfall", "Goliath Daydreamer", "Sizzling Changeling", "Blight Rot", "Bogslithers Embrace", "Creakwood Safewright", "Dawnhand Dissident", "Gnarlbark Elm", "Graveshifter", "Iron-Shield Elf", "Nameless Inversion", "Burdened Stoneback", "Encumbered Reejerey", "Kinscaer Sentry", "Liminal Hold", "Moonlit Lamenter", "Protective Response", "Rhys, the Evermore", "Slumbering Walker", "Spiral into Solitude", "Wanderbrine Trapper", "Winnowing"],
+            "2.5": ["Glamermite", "Noggle the Mind", "Silvergill Mentor", "Unexpected Assistance", "Boldwyr Aggressor", "Elder Auntie", "Flamebraider", "Kulrath Zealot", "Scuzzback Scrounger", "Sourbread Auntie", "Squawkroaster", "Sting-Slinger", "Tweeze", "Boggart Mischief", "Dream Seizer", "Grub, Storied Matriarch // Grub, Notorious Auntie", "Gutsplitter Gang", "Mudbutton Cursetosser", "Nightmare Sower", "Requiting Hex", "Retched Wretch", "Scarblade Scout", "Shimmercreep", "Twilight Diviner", "Unbury", "Flock Impostor", "Thoughtweft Imbuer", "Wanderbrine Preacher"],
+            "2.0": ["Aquitects Defenses", "Illusion Spinners", "Omni-Changeling", "Stratosoarer", "Summit Sentinel", "Thirst for Identity", "Wild Unraveling", "Boneclub Berserker", "Brambleback Brute", "Flamekin Gildweaver", "Goatnap", "Gristle Glutton", "Hexing Squelcher", "Kindle the Inner Flame", "Soulbright Seeker", "Warren Torchmaster", "Aunties Sentence", "Barbed Bloodletter", "Bloodline Bidding", "Boggart Prankster", "Dawnhand Eulogist", "Dose of Dawnglow", "Heirloom Auntie", "Goldmeadow Nomad", "Keep Out", "Kinsbaile Aspirant", "Morningtides Light", "Personify", "Reluctant Dounguard", "Shore Lurker", "Sun-Dappled Celebrant", "Timid Shieldbearer", "Tributary Vaulter"],
+            "1.5": ["Glen Elendra’s Answer", "Gravelgill Scoundrel", "Kulrath Mystic", "Pestered Wellguard", "Run Away Together", "Silvergill Peddler", "Tanufel Rimespeaker", "Wanderwine Distracter", "Wanderwine Farewell", "Burning Curiosity", "Enraged Flamecaster", "Flame-Chain Mauler", "Impolite Entrance", "Lavaleaper", "Reckless Ransacking", "Bile-Vial Boggart", "Blighted Blackthorn", "Moonglove Extractor", "Perfect Intimidation", "Scarblades Malice", "Appeal to Eirdu", "Bark of Doran", "Clachan Festival", "Crib Swap", "Evershrikes Gift", "Gallant Fowlknight", "Kithkeeper", "Meanders Guide", "Riverguards Reflexes"],
             "Shit-SB": ["Rimefire Torque", "Spell Snare", "Lasting Tarfire", "Meek Attack", "Darkness Descends", "Mornsong Aria"]
         };
 
-        const contentDiv = document.getElementById('tier-content');
-
-        async function getImg(name) {
-            try {
-                // Scryfall fuzzy search dla lepszej trafności
-                const resp = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${encodeURIComponent(name)}`);
-                const json = await resp.json();
-                if (json.image_uris) return json.image_uris.normal;
-                if (json.card_faces) return json.card_faces[0].image_uris.normal;
-                return 'https://svgs.scryfall.io/errors/missing.svg';
-            } catch (e) {
-                return 'https://svgs.scryfall.io/errors/missing.svg';
-            }
+        function getLocalImgPath(cardName) {
+            // Logika dopasowana do Twoich nazw plików (tylko pierwsze słowo)
+            const firstWord = cardName.split(/[ /,’']/)[0];
+            return `img/${firstWord}.jpg`;
         }
 
-        async function init() {
+        function init() {
+            const contentDiv = document.getElementById('tier-content');
             for (const [tier, cards] of Object.entries(tierData)) {
                 const section = document.createElement('div');
                 section.className = `tier-section tier-${tier.replace('.', '-')}`;
-                
                 const tierTitle = tier === "Shit-SB" ? "Shit / Sideboard" : `Tier ${tier}`;
                 
                 section.innerHTML = `
@@ -155,22 +137,20 @@
                 contentDiv.appendChild(section);
 
                 const grid = document.getElementById(`grid-${tier.replace('.', '-')}`);
-
-                cards.forEach(async (cardName) => {
+                cards.forEach((cardName) => {
                     const cardDiv = document.createElement('div');
                     cardDiv.className = 'card-wrapper';
-                    cardDiv.innerHTML = `<div class="loader">...</div>`;
-                    grid.appendChild(cardDiv);
-
-                    const imgUrl = await getImg(cardName);
+                    const imgUrl = getLocalImgPath(cardName);
+                    
                     cardDiv.innerHTML = `
-                        <img src="${imgUrl}" class="card-img" alt="${cardName}" loading="lazy">
+                        <img src="${imgUrl}" class="card-img" alt="${cardName}" loading="lazy" 
+                             onerror="this.src='https://svgs.scryfall.io/errors/missing.svg'">
                         <div class="card-info">${cardName}</div>
                     `;
+                    grid.appendChild(cardDiv);
                 });
             }
         }
-
         init();
     </script>
 </body>
